@@ -1,19 +1,15 @@
 <resources>
     <string name="app_name">Examen Inicial</string>
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
 
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
+    <!-- Preferences -->
+    <string name="preferences_header">Configura tu aventura</string>
+    <string name="nombre_heroe_preferences">Nombre del héroe</string>
+    <string name="arma_heroe_preferences">Arma del héroe</string>
+    <string name="modo_facil_preferences">Modo fácil</string>
+    <string name="vampiros_preference">Vampiros</string>
+    <string name="demonios_preferences">Demonios</string>
+    <string name="orcos_preferences">Orcos</string>
+    <string name="trolls_preferences">Trolls</string>
 
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

@@ -11,8 +11,8 @@
         android:label="fragment_inicio"
         tools:layout="@layout/fragment_inicio" >
         <action
-            android:id="@+id/action_inicioFragment_to_partidaFragment"
-            app:destination="@id/partidaFragment" />
+            android:id="@+id/action_inicioFragment_to_preferenciasFragment"
+            app:destination="@id/preferenciasFragment" />
     </fragment>
     <fragment
         android:id="@+id/partidaFragment"
@@ -32,5 +32,13 @@
         <argument
             android:name="puntos"
             app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/preferenciasFragment"
+        android:name="iestr.gag.examen.view.PreferenciasFragment"
+        android:label="PreferenciasFragment" >
+        <action
+            android:id="@+id/action_preferenciasFragment_to_partidaFragment"
+            app:destination="@id/partidaFragment" />
     </fragment>
 </navigation>

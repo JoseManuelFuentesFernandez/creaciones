@@ -32,8 +32,10 @@ class InicioFragment : Fragment() {
 
         //Botón NUEVA PARTIDA
         enlace.botonNueva.setOnClickListener {
-            findNavController().navigate(InicioFragmentDirections.actionInicioFragmentToPartidaFragment())
+            findNavController().navigate(InicioFragmentDirections.actionInicioFragmentToPreferenciasFragment())
         }
+
+        //TODO BOTON ADMIRAR HEROES CON LISTA DE HEROES Y PUNTOS
 
     }
 }
