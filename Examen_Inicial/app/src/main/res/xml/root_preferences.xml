@@ -11,8 +11,8 @@
 
         <ListPreference
             app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
+            app:entries="@array/etiqueta_arma"
+            app:entryValues="@array/valor_arma"
             app:key="arma"
             app:title="@string/arma_heroe_preferences"
             app:useSimpleSummaryProvider="true" />
@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:defaultValue="false"
             app:key="facil"
-            tools:title="@string/modo_facil_preferences" />
+            app:title="@string/modo_facil_preferences" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="@string/vampiros_preference"
@@ -38,6 +38,13 @@
             android:defaultValue="true"
             android:key="@string/trolls_preferences"
             android:title="@string/trolls_preferences" />
+
+        <Preference
+            android:key="button_preference"
+            android:title="Button Preference"
+            android:summary="Haz clic para empezar la partida"
+            app:icon="@drawable/ic_baseline_play_arrow_24"
+            app:layout="@layout/button_preferences" />
 
     </PreferenceCategory>
 
