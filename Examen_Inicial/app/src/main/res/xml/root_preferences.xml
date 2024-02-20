@@ -41,11 +41,8 @@
 
         <Preference
             android:key="button_preference"
-            android:title="Button Preference"
-            android:summary="Haz clic para empezar la partida"
-            app:icon="@drawable/ic_baseline_play_arrow_24"
+            app:enabled="true"
             app:layout="@layout/button_preferences" />
-
     </PreferenceCategory>
 
 </PreferenceScreen>

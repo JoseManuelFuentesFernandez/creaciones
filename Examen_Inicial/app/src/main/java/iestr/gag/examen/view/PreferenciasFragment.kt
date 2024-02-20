@@ -17,6 +17,7 @@ class PreferenciasFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
+        //TODO BOTON CLICK CORRECTO
         val buttonPreference = findPreference<Preference>("button_preference")
         buttonPreference?.setOnPreferenceClickListener {
             findNavController().navigate(PreferenciasFragmentDirections.actionPreferenciasFragmentToPartidaFragment())
