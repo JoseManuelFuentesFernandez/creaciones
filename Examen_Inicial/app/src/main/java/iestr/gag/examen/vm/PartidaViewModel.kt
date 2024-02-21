@@ -102,12 +102,12 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
             bicho.energia-=efecto
             if(bicho.energia<=0) {//Si lo mato, gano 10 (sin pasar de 100) de energía y genero otro bicho
                 _listaBichos.removeAt(pos)
-                _energia.value = Math.min(_energia.value!! + 10, 100)
+                actualizacionEnergiaHeroe(Math.min(_energia.value!! + 10, 100))
                 nuevoBicho()
             }
             hayQueInformar=true
             //Sumo tantos puntos como energía le quito
-            _puntos.value=_puntos.value!!+efecto
+            actualizacionPuntosHeroe(_puntos.value!!+efecto)
         }
         finalizaAtaque(hayQueInformar)
     }
@@ -154,7 +154,7 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
                     _textoInformativo.value = "Turno del jugador"
                 }
             }
-            _energia.value=Math.max(0,_energia.value!!-impactoReal)
+            actualizacionEnergiaHeroe(Math.max(0,_energia.value!!-impactoReal))
         }
         cambiaTurno()
     }
@@ -180,12 +180,12 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
                     listaBajas.add(b)
                 }
                 hayQueInformar=true
-                _puntos.value=_puntos.value!!+efecto
+                actualizacionPuntosHeroe(_puntos.value!!+efecto)
             }
         }
         for(b in listaBajas){
             _listaBichos.remove(b)
-            _energia.value = min(_energia.value!! + 10, 100)
+            actualizacionEnergiaHeroe(min(_energia.value!! + 10, 100))
             nuevoBicho()
         }
         finalizaAtaque(hayQueInformar)
@@ -205,10 +205,43 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
         cambiaTurno()
     }
 
+    //Animación energía héroe
+    fun actualizacionEnergiaHeroe(nuevaEnergia: Int) {
+        viewModelScope.launch {
+            val currentEnergy = energia.value ?: 0
+            val step = if (nuevaEnergia > currentEnergy) 1 else -1
+            var current = currentEnergy
 
-    //Mostrar mensajes en la barra superior
-    fun mostrarMensajeBarraSuperior(mensaje: String) {
+            while (current != nuevaEnergia) {
+                current += step
+                _energia.value = current
+                delay(50) // Adjust the delay time for animation speed
+            }
+        }
+    }
 
+    //Animación puntos héroe
+    fun actualizacionPuntosHeroe(nuevosPuntos: Int) {
+        viewModelScope.launch {
+            val currentPoints = puntos.value ?: 0
+            val step = if (nuevosPuntos > currentPoints) 1 else -1
+            var current = currentPoints
+
+            while (current != nuevosPuntos) {
+                current += step
+                _puntos.value = current
+                delay(50) // Adjust the delay time for animation speed
+            }
+        }
+    }
+
+    //Animación mensajes barra superior
+    fun mostrarMensajeBarraSuperior(texto: String) {
+        viewModelScope.launch {
+            _textoInformativo.value = texto
+            delay(2000) // Show the message for 2 seconds
+            _textoInformativo.value = "Turno del jugador" // Change back to default message
+        }
     }
 
 }
