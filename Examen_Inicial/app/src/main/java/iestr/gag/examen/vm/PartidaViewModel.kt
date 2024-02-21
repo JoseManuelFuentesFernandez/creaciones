@@ -1,23 +1,27 @@
 package iestr.gag.examen.vm
 
 import android.app.Application
-import android.os.CountDownTimer
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import iestr.gag.examen.model.Arma
 import iestr.gag.examen.model.Bicho
 import iestr.gag.examen.model.BichosProvider
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import java.lang.Long.max
-import java.util.*
 import kotlin.math.min
 
 class PartidaViewModel(application: Application) : AndroidViewModel(application) {
+    //TextView barra superior
+    private val _textoInformativo = MutableLiveData<String>()
+    val textoInformativo: LiveData<String>
+        get() = _textoInformativo
+
+    //Lista de mensajes para que no se solapen
+    private val _mensajes = MutableLiveData<List<String>>()
+    val mensajes: LiveData<List<String>>
+        get() = _mensajes
 
     //Información del héroe
     private var _energia=MutableLiveData<Int>(100)
@@ -66,17 +70,32 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
         var hayQueInformar=false//¿Hay que informar de cambios en la lista tras el ataque?
         //Si me esquiva, no le hago nada
         if(Math.random()<bicho.esquiveReal()){
-            Toast.makeText(getApplication(),"esquivado",Toast.LENGTH_SHORT).show()
+            //mostrarMensajeBarraSuperior("esquivado")
+            viewModelScope.launch {
+                _textoInformativo.value = "\"esquivado\""
+                delay(2000)
+                _textoInformativo.value = "Turno del jugador"
+            }
         //Si no me esquiva, le haré daño: más o menos, dependiendo de si para el golpe o no
         }else{
             //La fuerza de mi golpe efectiva se ve afectada por la energía que tengo
             var fuerzaGolpe=(arma.ataque*_energia.value!!).toInt()
             //Si me para, le hago un 10% del daño que le haría si le doy de lleno
             if(Math.random()<bicho.paradaReal()){
-                Toast.makeText(getApplication(),"parado",Toast.LENGTH_SHORT).show()
+                //mostrarMensajeBarraSuperior("parado")
+                viewModelScope.launch {
+                    _textoInformativo.value = "parado!!"
+                    delay(2000)
+                    _textoInformativo.value = "Turno del jugador"
+                }
                 fuerzaGolpe=(fuerzaGolpe/10f).toInt()
             }else {
-                Toast.makeText(getApplication(), "le das de lleno", Toast.LENGTH_SHORT).show()
+                //mostrarMensajeBarraSuperior("le das de lleno")
+                viewModelScope.launch {
+                    _textoInformativo.value = "le das de lleno"
+                    delay(2000)
+                    _textoInformativo.value = "Turno del jugador"
+                }
             }
             //La energía que quito al enemigo no puede ser más de la que tiene
             val efecto=Math.min(bicho.energia,fuerzaGolpe)
@@ -103,21 +122,37 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
 
     public fun bichoAtacaProta(pos:Int){
         val bicho=_listaBichos[pos]
-        Toast.makeText(getApplication(),"${bicho.nombre} atacando",Toast.LENGTH_SHORT).show()
+        mostrarMensajeBarraSuperior("${bicho.nombre} atacando")
         //Si esquivo el golpe, no me hace nada
         val esquiveReal= arma.esquive*_energia.value!!/100
         if(Math.random()<esquiveReal){
-            Toast.makeText(getApplication(),"ESQUIVAO!!",Toast.LENGTH_SHORT).show()
+            //mostrarMensajeBarraSuperior("ESQUIVAO!!")
+            viewModelScope.launch {
+                _textoInformativo.value = "ESQUIVAO!!"
+                delay(2000)
+                _textoInformativo.value = "Turno del jugador"
+            }
         //Si no lo esquivo, me hará más o menos daño, dependiendo de si paro o no
         }else {
             var impactoReal=bicho.fuerzaReal()
             val paradaReal= arma.parada*_energia.value!!/100
             //Si lo paro, me hace un 10% del daño que me haría si me da de lleno
             if(Math.random()<paradaReal){
-                Toast.makeText(getApplication(),"PARAO!!",Toast.LENGTH_SHORT).show()
+
+                //mostrarMensajeBarraSuperior("PARAO!!")
+                viewModelScope.launch {
+                    _textoInformativo.value = "PARAO!!"
+                    delay(2000)
+                    _textoInformativo.value = "Turno del jugador"
+                }
                 impactoReal=(impactoReal/10f).toInt()
             }else{
-                Toast.makeText(getApplication(),"T'AN DAO!!",Toast.LENGTH_SHORT).show()
+                mostrarMensajeBarraSuperior("T'AN DAO!!")
+                viewModelScope.launch {
+                    _textoInformativo.value = "T'AN DAO!!"
+                    delay(2000)
+                    _textoInformativo.value = "Turno del jugador"
+                }
             }
             _energia.value=Math.max(0,_energia.value!!-impactoReal)
         }
@@ -170,5 +205,10 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
         cambiaTurno()
     }
 
+
+    //Mostrar mensajes en la barra superior
+    fun mostrarMensajeBarraSuperior(mensaje: String) {
+
+    }
 
 }

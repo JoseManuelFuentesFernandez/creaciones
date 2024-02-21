@@ -34,6 +34,10 @@ class PartidaFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        modelo.textoInformativo.observe(viewLifecycleOwner) { mensaje ->
+            enlace.textoInformativo.text = mensaje
+        }
+
         //Ajusto el prota
         enlace.armaProta.setImageResource(when(modelo.arma.ordinal){
             0 -> R.drawable.cuchillos
