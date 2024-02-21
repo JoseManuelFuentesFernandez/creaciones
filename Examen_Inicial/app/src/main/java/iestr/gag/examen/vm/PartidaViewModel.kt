@@ -18,10 +18,9 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
     val textoInformativo: LiveData<String>
         get() = _textoInformativo
 
-    //Lista de mensajes para que no se solapen
-    private val _mensajes = MutableLiveData<List<String>>()
-    val mensajes: LiveData<List<String>>
-        get() = _mensajes
+    private val _mensajesBarraSuperior = MutableLiveData<List<String>>(emptyList())
+    val mensajesBarraSuperior: LiveData<List<String>>
+        get() = _mensajesBarraSuperior
 
     //Información del héroe
     private var _energia=MutableLiveData<Int>(100)
@@ -237,11 +236,32 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
 
     //Animación mensajes barra superior
     fun mostrarMensajeBarraSuperior(texto: String) {
-        viewModelScope.launch {
-            _textoInformativo.value = texto
-            delay(2000) // Show the message for 2 seconds
-            _textoInformativo.value = "Turno del jugador" // Change back to default message
+        // Agrega el nuevo mensaje a la lista de mensajes
+        val mensajesActuales = _mensajesBarraSuperior.value ?: emptyList()
+        val nuevosMensajes = mensajesActuales.toMutableList()
+        nuevosMensajes.add(texto)
+        _mensajesBarraSuperior.value = nuevosMensajes
+
+        // Solo inicia la animación si no hay otra en curso
+        if (mensajesActuales.isEmpty()) {
+            animarMensajesBarraSuperior()
         }
     }
 
+    private fun animarMensajesBarraSuperior() {
+        viewModelScope.launch {
+            // Espera antes de mostrar el primer mensaje
+            delay(2000)
+
+            // Muestra los mensajes uno por uno
+            _mensajesBarraSuperior.value?.forEach { mensaje ->
+                _textoInformativo.value = mensaje
+                delay(2000) // Espera 2 segundos antes de mostrar el siguiente mensaje
+            }
+
+            // Limpia la lista de mensajes después de mostrarlos todos
+            _mensajesBarraSuperior.value = emptyList()
+            _textoInformativo.value = "Turno del jugador" // Cambia de vuelta al mensaje por defecto
+        }
+    }
 }
