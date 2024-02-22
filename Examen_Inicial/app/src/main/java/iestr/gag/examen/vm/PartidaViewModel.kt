@@ -69,32 +69,17 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
         var hayQueInformar=false//¿Hay que informar de cambios en la lista tras el ataque?
         //Si me esquiva, no le hago nada
         if(Math.random()<bicho.esquiveReal()){
-            //mostrarMensajeBarraSuperior("esquivado")
-            viewModelScope.launch {
-                _textoInformativo.value = "\"esquivado\""
-                delay(2000)
-                _textoInformativo.value = "Turno del jugador"
-            }
+            mostrarMensajeBarraSuperior("esquivado")
         //Si no me esquiva, le haré daño: más o menos, dependiendo de si para el golpe o no
         }else{
             //La fuerza de mi golpe efectiva se ve afectada por la energía que tengo
             var fuerzaGolpe=(arma.ataque*_energia.value!!).toInt()
             //Si me para, le hago un 10% del daño que le haría si le doy de lleno
             if(Math.random()<bicho.paradaReal()){
-                //mostrarMensajeBarraSuperior("parado")
-                viewModelScope.launch {
-                    _textoInformativo.value = "parado!!"
-                    delay(2000)
-                    _textoInformativo.value = "Turno del jugador"
-                }
+                mostrarMensajeBarraSuperior("parado")
                 fuerzaGolpe=(fuerzaGolpe/10f).toInt()
             }else {
-                //mostrarMensajeBarraSuperior("le das de lleno")
-                viewModelScope.launch {
-                    _textoInformativo.value = "le das de lleno"
-                    delay(2000)
-                    _textoInformativo.value = "Turno del jugador"
-                }
+                mostrarMensajeBarraSuperior("le das de lleno")
             }
             //La energía que quito al enemigo no puede ser más de la que tiene
             val efecto=Math.min(bicho.energia,fuerzaGolpe)
@@ -125,12 +110,7 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
         //Si esquivo el golpe, no me hace nada
         val esquiveReal= arma.esquive*_energia.value!!/100
         if(Math.random()<esquiveReal){
-            //mostrarMensajeBarraSuperior("ESQUIVAO!!")
-            viewModelScope.launch {
-                _textoInformativo.value = "ESQUIVAO!!"
-                delay(2000)
-                _textoInformativo.value = "Turno del jugador"
-            }
+            mostrarMensajeBarraSuperior("ESQUIVAO!!")
         //Si no lo esquivo, me hará más o menos daño, dependiendo de si paro o no
         }else {
             var impactoReal=bicho.fuerzaReal()
@@ -138,20 +118,10 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
             //Si lo paro, me hace un 10% del daño que me haría si me da de lleno
             if(Math.random()<paradaReal){
 
-                //mostrarMensajeBarraSuperior("PARAO!!")
-                viewModelScope.launch {
-                    _textoInformativo.value = "PARAO!!"
-                    delay(2000)
-                    _textoInformativo.value = "Turno del jugador"
-                }
+                mostrarMensajeBarraSuperior("PARAO!!")
                 impactoReal=(impactoReal/10f).toInt()
             }else{
                 mostrarMensajeBarraSuperior("T'AN DAO!!")
-                viewModelScope.launch {
-                    _textoInformativo.value = "T'AN DAO!!"
-                    delay(2000)
-                    _textoInformativo.value = "Turno del jugador"
-                }
             }
             actualizacionEnergiaHeroe(Math.max(0,_energia.value!!-impactoReal))
         }
@@ -207,14 +177,14 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
     //Animación energía héroe
     fun actualizacionEnergiaHeroe(nuevaEnergia: Int) {
         viewModelScope.launch {
-            val currentEnergy = energia.value ?: 0
-            val step = if (nuevaEnergia > currentEnergy) 1 else -1
-            var current = currentEnergy
+            val puntosActuales = energia.value ?: 0
+            val paso = if (nuevaEnergia > puntosActuales) 1 else -1
+            var actual = puntosActuales
 
-            while (current != nuevaEnergia) {
-                current += step
-                _energia.value = current
-                delay(50) // Adjust the delay time for animation speed
+            while (actual != nuevaEnergia) {
+                actual += paso
+                _energia.value = actual
+                delay(30)
             }
         }
     }
@@ -222,14 +192,14 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
     //Animación puntos héroe
     fun actualizacionPuntosHeroe(nuevosPuntos: Int) {
         viewModelScope.launch {
-            val currentPoints = puntos.value ?: 0
-            val step = if (nuevosPuntos > currentPoints) 1 else -1
-            var current = currentPoints
+            val puntosActuales = puntos.value ?: 0
+            val paso = if (nuevosPuntos > puntosActuales) 1 else -1
+            var actual = puntosActuales
 
-            while (current != nuevosPuntos) {
-                current += step
-                _puntos.value = current
-                delay(50) // Adjust the delay time for animation speed
+            while (actual != nuevosPuntos) {
+                actual += paso
+                _puntos.value = actual
+                delay(50)
             }
         }
     }
@@ -242,7 +212,7 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
         nuevosMensajes.add(texto)
         _mensajesBarraSuperior.value = nuevosMensajes
 
-        // Solo inicia la animación si no hay otra en curso
+        // Solo inicia el cambio de texto si no hay uno en curso
         if (mensajesActuales.isEmpty()) {
             animarMensajesBarraSuperior()
         }
@@ -250,18 +220,16 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
 
     private fun animarMensajesBarraSuperior() {
         viewModelScope.launch {
-            // Espera antes de mostrar el primer mensaje
-            delay(2000)
-
+            delay(2)
             // Muestra los mensajes uno por uno
             _mensajesBarraSuperior.value?.forEach { mensaje ->
                 _textoInformativo.value = mensaje
-                delay(2000) // Espera 2 segundos antes de mostrar el siguiente mensaje
+                delay(2000)
             }
 
-            // Limpia la lista de mensajes después de mostrarlos todos
+            // Vacía la lista de mensajes después de mostrarlos todos
             _mensajesBarraSuperior.value = emptyList()
-            _textoInformativo.value = "Turno del jugador" // Cambia de vuelta al mensaje por defecto
+            _textoInformativo.value = "Turno del jugador"
         }
     }
 }
