@@ -37,5 +37,7 @@ class InicioFragment : Fragment() {
 
         //TODO BOTON ADMIRAR HEROES CON LISTA DE HEROES Y PUNTOS
 
+
+        //TODO BOTON CONTINUAR PARTIDA
     }
 }

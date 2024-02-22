@@ -1,10 +1,13 @@
 package iestr.gag.examen.vm
 
 import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import iestr.gag.examen.R
 import iestr.gag.examen.model.Arma
 import iestr.gag.examen.model.Bicho
 import iestr.gag.examen.model.BichosProvider
@@ -13,6 +16,10 @@ import kotlinx.coroutines.launch
 import kotlin.math.min
 
 class PartidaViewModel(application: Application) : AndroidViewModel(application) {
+    //Preferencias
+    // TODO FIX sharedPreferences NULL
+    private val sharedPreferences: SharedPreferences = application.getSharedPreferences("root_preferences", Context.MODE_PRIVATE)
+
     //TextView barra superior
     private val _textoInformativo = MutableLiveData<String>()
     val textoInformativo: LiveData<String>
@@ -48,15 +55,35 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
     //Para saber cuándo genero un enemigo extra:
     private var ataques=0
     
-    /*init {
-        recuperaLista()
-    }*/
+    init {
+        applyPreferences()
+    }
 
-    /*private fun recuperaLista(){
-        for(i in 1..4){
+    private fun applyPreferences() {
+        val nombreHeroe = sharedPreferences.getString("nombre", "Heroe") ?: "Heroe"
+
+        val armaOrdinal = sharedPreferences.getString("arma", "0")?.toIntOrNull() ?: 0
+        val arma = Arma.values().getOrNull(armaOrdinal) ?: Arma.CUCHILLOS
+
+        val esFacil = sharedPreferences.getBoolean("facil", false)
+        if (esFacil) {
+            recuperaLista(2)
+        }else{
+            recuperaLista(4)
+        }
+
+        val permitirVampiros = sharedPreferences.getBoolean(R.string.vampiros_preference.toString(), true)
+        val permitirDemonios = sharedPreferences.getBoolean(R.string.demonios_preferences.toString(), true)
+        val permitirOrcos = sharedPreferences.getBoolean(R.string.orcos_preferences.toString(), true)
+        val permitirTrolls = sharedPreferences.getBoolean(R.string.trolls_preferences.toString(), true)
+    }
+
+    private fun recuperaLista(nEnemigos:Int){
+        _listaBichos.clear()
+        for(i in 1..nEnemigos){
             nuevoBicho()
         }
-    }*/
+    }
 
     private fun nuevoBicho(){
         _listaBichos.add(BichosProvider.getUno())
@@ -117,7 +144,6 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
             val paradaReal= arma.parada*_energia.value!!/100
             //Si lo paro, me hace un 10% del daño que me haría si me da de lleno
             if(Math.random()<paradaReal){
-
                 mostrarMensajeBarraSuperior("PARAO!!")
                 impactoReal=(impactoReal/10f).toInt()
             }else{
