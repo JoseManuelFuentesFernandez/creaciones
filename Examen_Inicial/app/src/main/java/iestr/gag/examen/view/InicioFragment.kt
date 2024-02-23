@@ -35,8 +35,9 @@ class InicioFragment : Fragment() {
             findNavController().navigate(InicioFragmentDirections.actionInicioFragmentToPreferenciasFragment())
         }
 
-        //TODO BOTON ADMIRAR HEROES CON LISTA DE HEROES Y PUNTOS
-
+        enlace.botonLista.setOnClickListener{
+            findNavController().navigate(InicioFragmentDirections.actionInicioFragmentToHeroesCaidosFragment())
+        }
 
         //TODO BOTON CONTINUAR PARTIDA
     }

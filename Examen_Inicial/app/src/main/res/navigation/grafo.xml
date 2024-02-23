@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_inicioFragment_to_preferenciasFragment"
             app:destination="@id/preferenciasFragment" />
+        <action
+            android:id="@+id/action_inicioFragment_to_heroesCaidosFragment"
+            app:destination="@id/heroesCaidosFragment" />
     </fragment>
     <fragment
         android:id="@+id/partidaFragment"
@@ -41,4 +44,9 @@
             android:id="@+id/action_preferenciasFragment_to_partidaFragment"
             app:destination="@id/partidaFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/heroesCaidosFragment"
+        android:name="iestr.gag.examen.view.HeroesCaidosFragment"
+        android:label="fragment_heroes_caidos_list"
+        tools:layout="@layout/fragment_heroes_caidos_list" />
 </navigation>
