@@ -1,14 +1,17 @@
 package iestr.gag.examen.view
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import iestr.gag.examen.R
 import iestr.gag.examen.databinding.FragmentPartidaBinding
 import iestr.gag.examen.vm.PartidaViewModel
@@ -20,6 +23,11 @@ class PartidaFragment : Fragment() {
     val adaptador:BichoAdapter by lazy{
         BichoAdapter(this,modelo)
     }
+
+    val preferencias:SharedPreferences by lazy{
+        PreferenceManager.getDefaultSharedPreferences(requireContext())
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -88,5 +96,4 @@ class PartidaFragment : Fragment() {
             }
         }
     }
-
 }

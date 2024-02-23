@@ -1,10 +1,14 @@
 package iestr.gag.examen.vm
 
 import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.preference.PreferenceManager
 import iestr.gag.examen.R
 import iestr.gag.examen.model.Arma
 import iestr.gag.examen.model.Bicho
@@ -15,7 +19,10 @@ import kotlin.math.min
 
 class PartidaViewModel(application: Application) : AndroidViewModel(application) {
     //Preferencias
-    private val preferencesProvider = PreferencesProvider(application.baseContext)
+    private val appContext: Context = application.applicationContext
+    private val preferencias: SharedPreferences by lazy {
+        appContext.getSharedPreferences("root_preferences", Context.MODE_PRIVATE)
+    }
 
     //TextView barra superior
     private val _textoInformativo = MutableLiveData<String>()
@@ -38,7 +45,7 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
     val turnoHeroe:LiveData<Boolean>
         get()=_turnoHeroe
     //el héroe tendrá una de entre cuatro armas (ver enum class Arma)
-    var arma=Arma.values()[1]
+    var arma=Arma.values()[Arma.ESPADA_ESCUDO.ordinal]
 
     //Datos de los enemigos
     private var _listaBichos=BichosProvider.getLista()
@@ -57,9 +64,9 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
     }
     
     private fun applyPreferences() {
-        arma = preferencesProvider.getArmaHeroe(Arma.ESPADA_ESCUDO)
+        arma = Arma.values()[preferencias.getInt("arma",Arma.ESPADA_ESCUDO.ordinal)]
 
-        val esFacil = preferencesProvider.estaModoFacil(false)
+        val esFacil = preferencias.getBoolean("facil",false)
         if (esFacil) {
             recuperaLista(2)
         }else{
