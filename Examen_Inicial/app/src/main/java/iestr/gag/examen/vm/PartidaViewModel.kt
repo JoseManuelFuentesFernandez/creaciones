@@ -1,8 +1,6 @@
 package iestr.gag.examen.vm
 
 import android.app.Application
-import android.content.Context
-import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -17,8 +15,7 @@ import kotlin.math.min
 
 class PartidaViewModel(application: Application) : AndroidViewModel(application) {
     //Preferencias
-    // TODO FIX sharedPreferences NULL
-    private val sharedPreferences: SharedPreferences = application.getSharedPreferences("root_preferences", Context.MODE_PRIVATE)
+    private val preferencesProvider = PreferencesProvider(application.baseContext)
 
     //TextView barra superior
     private val _textoInformativo = MutableLiveData<String>()
@@ -41,7 +38,7 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
     val turnoHeroe:LiveData<Boolean>
         get()=_turnoHeroe
     //el héroe tendrá una de entre cuatro armas (ver enum class Arma)
-    var arma=Arma.values()[(0..3).random()]
+    var arma=Arma.values()[1]
 
     //Datos de los enemigos
     private var _listaBichos=BichosProvider.getLista()
@@ -60,22 +57,14 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
     }
     
     private fun applyPreferences() {
-        val nombreHeroe = sharedPreferences.getString("nombre", "Heroe") ?: "Heroe"
+        arma = preferencesProvider.getArmaHeroe(Arma.ESPADA_ESCUDO)
 
-        val armaOrdinal = sharedPreferences.getString("arma", "0")?.toIntOrNull() ?: 0
-        arma = Arma.values().getOrNull(armaOrdinal) ?: Arma.CUCHILLOS
-
-        val esFacil = sharedPreferences.getBoolean("facil", false)
+        val esFacil = preferencesProvider.estaModoFacil(false)
         if (esFacil) {
             recuperaLista(2)
         }else{
             recuperaLista(4)
         }
-
-        val permitirVampiros = sharedPreferences.getBoolean(R.string.vampiros_preference.toString(), true)
-        val permitirDemonios = sharedPreferences.getBoolean(R.string.demonios_preferences.toString(), true)
-        val permitirOrcos = sharedPreferences.getBoolean(R.string.orcos_preferences.toString(), true)
-        val permitirTrolls = sharedPreferences.getBoolean(R.string.trolls_preferences.toString(), true)
     }
 
     private fun recuperaLista(nEnemigos:Int){
