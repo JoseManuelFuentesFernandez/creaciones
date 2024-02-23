@@ -41,7 +41,7 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
     val turnoHeroe:LiveData<Boolean>
         get()=_turnoHeroe
     //el héroe tendrá una de entre cuatro armas (ver enum class Arma)
-    val arma=Arma.values()[(0..3).random()]
+    var arma=Arma.values()[(0..3).random()]
 
     //Datos de los enemigos
     private var _listaBichos=BichosProvider.getLista()
@@ -58,12 +58,12 @@ class PartidaViewModel(application: Application) : AndroidViewModel(application)
     init {
         applyPreferences()
     }
-
+    
     private fun applyPreferences() {
         val nombreHeroe = sharedPreferences.getString("nombre", "Heroe") ?: "Heroe"
 
         val armaOrdinal = sharedPreferences.getString("arma", "0")?.toIntOrNull() ?: 0
-        val arma = Arma.values().getOrNull(armaOrdinal) ?: Arma.CUCHILLOS
+        arma = Arma.values().getOrNull(armaOrdinal) ?: Arma.CUCHILLOS
 
         val esFacil = sharedPreferences.getBoolean("facil", false)
         if (esFacil) {

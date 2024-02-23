@@ -35,6 +35,7 @@ class PartidaFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // Observador de barra superior
         modelo.textoInformativo.observe(viewLifecycleOwner) { mensaje ->
             enlace.textoInformativo.text = mensaje
         }
