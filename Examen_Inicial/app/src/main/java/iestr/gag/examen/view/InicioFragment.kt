@@ -35,6 +35,7 @@ class InicioFragment : Fragment() {
             findNavController().navigate(InicioFragmentDirections.actionInicioFragmentToPreferenciasFragment())
         }
 
+        //Botón Lista de héroes
         enlace.botonLista.setOnClickListener{
             findNavController().navigate(InicioFragmentDirections.actionInicioFragmentToHeroesCaidosFragment())
         }

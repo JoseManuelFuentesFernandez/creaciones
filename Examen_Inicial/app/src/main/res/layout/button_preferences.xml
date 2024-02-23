@@ -5,16 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="200dp">
 
-    <ImageButton
-        android:id="@+id/button_start"
-        style="@style/Widget.AppCompat.ImageButton"
+    <ImageView
+        android:id="@+id/button_preference"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_baseline_play_arrow_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.62"
         app:srcCompat="@drawable/ic_baseline_play_arrow_24" />
 </androidx.constraintlayout.widget.ConstraintLayout>
