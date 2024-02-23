@@ -3,12 +3,14 @@ package iestr.gag.examen.model
 import java.lang.StringBuilder
 import kotlin.random.Random
 
+//@Entity(tableName = "bicho")
 data class Bicho(
-    //val id:Int?=null,
+    //@PrimaryKey(autoGenerate = true) val id: Int = 0,
     val tipo:Int=(0..3).random(),
     val nombre:String= nombreAleatorio(),
     val arma:Int=tipo,//Por defecto, a cada bicho le doy un tipo de arma
     var energia:Int=100,
+    val heroeId: Int // ID del héroe al que pertenece este bicho
 ){
     fun esquiveReal()= Arma.values()[arma].esquive*energia/100//Es un porcentaje (entre 0 y 1)
     fun paradaReal()= Arma.values()[arma].parada*energia/100//Es un porcentaje (entre 0 y 1)
