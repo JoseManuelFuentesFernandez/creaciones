@@ -15,13 +15,13 @@ class ListaViewModel: ViewModel() {
         get() = _cambio
 
     init{
-        _lista.addAll(OrcosProvider.generaLista(3))
+        //_lista.addAll(OrcosProvider.generaLista(3))
         _cambio.value=_cambio.value!!+1
     }
 
     fun recarga(){
         _lista.clear()
-        _lista.addAll(OrcosProvider.generaLista(3))
+        //_lista.addAll(OrcosProvider.generaLista(3))
         _cambio.value=_cambio.value!!+1
     }
 
