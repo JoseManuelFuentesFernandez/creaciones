@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/recargar"
+        android:icon="@android:drawable/ic_popup_sync"
+        android:title="Recargar"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/insertar"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="Insertar"
+        app:showAsAction="ifRoom" />
+</menu>
