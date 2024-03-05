@@ -3,10 +3,7 @@ package iestr.gag.enemigos.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import iestr.gag.enemigos.model.Orco
-import iestr.gag.enemigos.model.OrcosProvider
-import kotlinx.coroutines.launch
 import java.lang.Integer.max
 
 class ListaViewModel: ViewModel() {

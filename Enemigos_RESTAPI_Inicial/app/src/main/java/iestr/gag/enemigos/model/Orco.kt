@@ -4,6 +4,7 @@ import java.lang.StringBuilder
 import kotlin.random.Random
 
 class Orco(
+    val id:String= "",
     val nombre:String= nombreAleatorio(),
     var energia:Int = Random.nextInt(50,101)
 ){
