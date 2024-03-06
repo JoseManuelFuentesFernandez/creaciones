@@ -1,5 +1,6 @@
 package iestr.gag.enemigos.viewmodel
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.LiveData
@@ -23,6 +24,9 @@ class ListaViewModel: ViewModel() {
     val cambio:LiveData<Int>
         get() = _cambio
 
+    @SuppressLint("StaticFieldLeak") //Necesario para que no leakee memoria por lo visto
+    lateinit var context:Context
+
     init{
         recarga()
     }
@@ -37,27 +41,39 @@ class ListaViewModel: ViewModel() {
 
     fun insertaOrco(){
         viewModelScope.launch {
-            //Como devuelve el Orco creado, lo meto en la lista con el id asignado en la restapi
-            _lista.add(ClienteRetrofit.servicio.insertaUno(Orco()))
-            _cambio.value=_cambio.value!!+1
+            try {
+                //Como devuelve el Orco creado, lo meto en la lista con el id ya asignado por la restapi
+                _lista.add(ClienteRetrofit.servicio.insertaUno(Orco()))
+                _cambio.value = _cambio.value!! + 1
+            }catch (e: Exception) {
+                Toast.makeText(context,e.toString(), Toast.LENGTH_LONG).show()
+            }
         }
     }
 
     fun modificaOrco(posicion:Int){
         viewModelScope.launch {
-            val modificado = _lista[posicion]
-            modificado.energia=max(0,modificado.energia-10)
-            ClienteRetrofit.servicio.modificaUno(modificado.id,modificado)
-            _cambio.value=_cambio.value!!+1
+            try {
+                val modificado = _lista[posicion]
+                modificado.energia=max(0,modificado.energia-10)
+                ClienteRetrofit.servicio.modificaUno(modificado.id,modificado)
+                _cambio.value=_cambio.value!!+1
+            }catch (e: Exception) {
+                Toast.makeText(context,e.toString(), Toast.LENGTH_LONG).show()
+            }
         }
     }
 
     fun eliminaOrco(posicion:Int){
         viewModelScope.launch {
-            val eliminado = _lista[posicion]
-            _lista.removeAt(posicion)
-            ClienteRetrofit.servicio.borraUno(eliminado.id)
-            _cambio.value=_cambio.value!!+1
+            try {
+                val eliminado = _lista[posicion]
+                _lista.removeAt(posicion)
+                ClienteRetrofit.servicio.borraUno(eliminado.id)
+                _cambio.value=_cambio.value!!+1
+            }catch (e: Exception) {
+                Toast.makeText(context,e.toString(), Toast.LENGTH_LONG).show()
+            }
         }
     }
 }

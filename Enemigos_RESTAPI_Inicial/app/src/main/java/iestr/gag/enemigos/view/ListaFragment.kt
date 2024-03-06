@@ -26,6 +26,7 @@ class ListaFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        vm.context = requireContext()
     }
 
     override fun onCreateView(
@@ -54,11 +55,7 @@ class ListaFragment : Fragment() {
                 return false
             }
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                try {
-                    vm.eliminaOrco(viewHolder.absoluteAdapterPosition)
-                }catch (e: Exception) {
-                    Toast.makeText(context,e.toString(),Toast.LENGTH_LONG).show()
-                }
+                vm.eliminaOrco(viewHolder.absoluteAdapterPosition)
             }
         })
         manejadorGestos.attachToRecyclerView(enlace.listado)
@@ -69,13 +66,9 @@ class ListaFragment : Fragment() {
                 menuInflater.inflate(R.menu.menu_superior,menu)
             }
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                try {
-                    when(menuItem.itemId){
-                        R.id.recargar -> vm.recarga()
-                        R.id.insertar -> vm.insertaOrco()
-                    }
-                } catch (e: Exception) {
-                    Toast.makeText(context,e.toString(),Toast.LENGTH_LONG).show()
+                when(menuItem.itemId){
+                    R.id.recargar -> vm.recarga()
+                    R.id.insertar -> vm.insertaOrco()
                 }
                 return true
             }
