@@ -1,9 +1,18 @@
 package iestr.gag.enemigos.viewmodel
 
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import iestr.gag.enemigos.model.ClienteRetrofit
 import iestr.gag.enemigos.model.Orco
+import iestr.gag.enemigos.model.ServicioRetrofit
+import iestr.gag.enemigos.view.ListaFragment
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.launch
+import java.lang.Exception
 import java.lang.Integer.max
 
 class ListaViewModel: ViewModel() {
@@ -15,28 +24,40 @@ class ListaViewModel: ViewModel() {
         get() = _cambio
 
     init{
-        //_lista.addAll(OrcosProvider.generaLista(3))
-        _cambio.value=_cambio.value!!+1
+        recarga()
     }
 
     fun recarga(){
-        _lista.clear()
-        //_lista.addAll(OrcosProvider.generaLista(3))
-        _cambio.value=_cambio.value!!+1
+        viewModelScope.launch {
+            _lista.clear()
+            _lista.addAll(ClienteRetrofit.servicio.eligeTodos())
+            _cambio.value=_cambio.value!!+1
+        }
     }
 
     fun insertaOrco(){
-       _lista.add(Orco())
-        _cambio.value=_cambio.value!!+1
+        viewModelScope.launch {
+            //Como devuelve el Orco creado, lo meto en la lista con el id asignado en la restapi
+            _lista.add(ClienteRetrofit.servicio.insertaUno(Orco()))
+            _cambio.value=_cambio.value!!+1
+        }
     }
 
     fun modificaOrco(posicion:Int){
-        _lista[posicion].energia=max(0,lista[posicion].energia-10)
-        _cambio.value=_cambio.value!!+1
+        viewModelScope.launch {
+            val modificado = _lista[posicion]
+            modificado.energia=max(0,modificado.energia-10)
+            ClienteRetrofit.servicio.modificaUno(modificado.id,modificado)
+            _cambio.value=_cambio.value!!+1
+        }
     }
 
     fun eliminaOrco(posicion:Int){
-        _lista.removeAt(posicion)
-        _cambio.value=_cambio.value!!+1
+        viewModelScope.launch {
+            val eliminado = _lista[posicion]
+            _lista.removeAt(posicion)
+            ClienteRetrofit.servicio.borraUno(eliminado.id)
+            _cambio.value=_cambio.value!!+1
+        }
     }
 }

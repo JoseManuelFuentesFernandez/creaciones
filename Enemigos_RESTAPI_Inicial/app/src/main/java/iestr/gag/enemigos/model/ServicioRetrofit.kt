@@ -10,15 +10,15 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ServicioRetrofit {
-    @GET("orco/{id}")
+    @GET("Orco/{id}")
     suspend fun eligeUno(@Path("id") id:String):Orco
-    @GET("orco")
+    @GET("Orco")
     suspend fun eligeTodos():List<Orco>
-    @POST("orco")
+    @POST("Orco")
     suspend fun insertaUno(@Body o:Orco):Orco
-    @DELETE("orco/{id}")
+    @DELETE("Orco/{id}")
     suspend fun borraUno(@Path("id") id:String):Orco
-    @PUT("orco/{id}")
+    @PUT("Orco/{id}")
     suspend fun modificaUno(@Path("id") id:String, @Body o:Orco):Orco
 }
 

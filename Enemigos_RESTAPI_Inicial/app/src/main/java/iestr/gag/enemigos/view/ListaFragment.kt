@@ -2,6 +2,7 @@ package iestr.gag.enemigos.view
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
@@ -53,7 +54,11 @@ class ListaFragment : Fragment() {
                 return false
             }
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                vm.eliminaOrco(viewHolder.absoluteAdapterPosition)
+                try {
+                    vm.eliminaOrco(viewHolder.absoluteAdapterPosition)
+                }catch (e: Exception) {
+                    Toast.makeText(context,e.toString(),Toast.LENGTH_LONG).show()
+                }
             }
         })
         manejadorGestos.attachToRecyclerView(enlace.listado)
@@ -64,9 +69,13 @@ class ListaFragment : Fragment() {
                 menuInflater.inflate(R.menu.menu_superior,menu)
             }
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                when(menuItem.itemId){
-                    R.id.recargar -> vm.recarga()
-                    R.id.insertar -> vm.insertaOrco()
+                try {
+                    when(menuItem.itemId){
+                        R.id.recargar -> vm.recarga()
+                        R.id.insertar -> vm.insertaOrco()
+                    }
+                } catch (e: Exception) {
+                    Toast.makeText(context,e.toString(),Toast.LENGTH_LONG).show()
                 }
                 return true
             }
