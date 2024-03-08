@@ -10,8 +10,6 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ServicioRetrofit {
-    @GET("Orco/{id}")
-    suspend fun eligeUno(@Path("id") id:String):Orco
     @GET("Orco")
     suspend fun eligeTodos():List<Orco>
     @POST("Orco")

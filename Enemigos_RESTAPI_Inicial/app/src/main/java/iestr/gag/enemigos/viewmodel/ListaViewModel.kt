@@ -33,20 +33,33 @@ class ListaViewModel: ViewModel() {
 
     fun recarga(){
         viewModelScope.launch {
-            _lista.clear()
-            _lista.addAll(ClienteRetrofit.servicio.eligeTodos())
-            _cambio.value=_cambio.value!!+1
+            try {
+                _lista.clear()
+                _lista.addAll(ClienteRetrofit.servicio.eligeTodos())
+                _cambio.value=_cambio.value!!+1
+
+                Toast.makeText(context,"Cargando orcos...",Toast.LENGTH_SHORT).show()
+                if(lista.isEmpty()){
+                    Toast.makeText(context,"No se han encontrado orcos",Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(context,"Orcos cargados correctamente",Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(context,"Error en la carga de datos", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
     fun insertaOrco(){
         viewModelScope.launch {
             try {
-                //Como devuelve el Orco creado, lo meto en la lista con el id ya asignado por la restapi
+                // Como devuelve el Orco creado, lo meto en la lista con el id ya asignado por la restapi
+                // Method	URL	    Payload	Response
+                // POST	    /users	User	User
                 _lista.add(ClienteRetrofit.servicio.insertaUno(Orco()))
                 _cambio.value = _cambio.value!! + 1
             }catch (e: Exception) {
-                Toast.makeText(context,e.toString(), Toast.LENGTH_LONG).show()
+                Toast.makeText(context,"Error al insertar", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -59,7 +72,7 @@ class ListaViewModel: ViewModel() {
                 ClienteRetrofit.servicio.modificaUno(modificado.id,modificado)
                 _cambio.value=_cambio.value!!+1
             }catch (e: Exception) {
-                Toast.makeText(context,e.toString(), Toast.LENGTH_LONG).show()
+                Toast.makeText(context,"Error al modificar", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -72,7 +85,7 @@ class ListaViewModel: ViewModel() {
                 ClienteRetrofit.servicio.borraUno(eliminado.id)
                 _cambio.value=_cambio.value!!+1
             }catch (e: Exception) {
-                Toast.makeText(context,e.toString(), Toast.LENGTH_LONG).show()
+                Toast.makeText(context,"Error al eliminar", Toast.LENGTH_LONG).show()
             }
         }
     }

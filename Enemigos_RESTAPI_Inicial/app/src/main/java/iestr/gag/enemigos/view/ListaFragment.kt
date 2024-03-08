@@ -26,7 +26,7 @@ class ListaFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        vm.context = requireContext()
+        vm.context = requireContext() //Para pasarle un contexto al viewmodel
     }
 
     override fun onCreateView(
