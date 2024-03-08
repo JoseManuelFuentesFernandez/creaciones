@@ -1,0 +1,4 @@
+- baseURL: https://65e7691953d564627a8ec3cf.mockapi.io
+- resource: Orco   ***IMPORTANTE primera 'o' mayúscula
+
+URL completa: https://65e7691953d564627a8ec3cf.mockapi.io/Orco
